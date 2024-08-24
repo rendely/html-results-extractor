@@ -1,0 +1,1 @@
+Javascript module for extracting the list of results from a web page
