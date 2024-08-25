@@ -1,22 +1,42 @@
-function extractElements(document) {
+// TODO
+// - div support
+// - find container with items that have low variance on scoring items
+
+
+
+
+
+function extractElements() {
 
   const tables = Array.from(document.body.querySelectorAll('tbody'));
-  tables.map((t, i) => {
-    console.log(`Table ${i}`);
-    console.log(`    Depth in body: ${countAncestors(t)}`);
-    console.log(`    Num rows: ${Array.from(t.querySelectorAll('tr')).length}`);
-    console.log(`    Num links: ${countLinks(t)}`);
-  })
+
+  const tableData = tables.map((t, i) => {
+    return {
+      index: i,
+      depthInBody: countAncestors(t),
+      numRows: Array.from(t.querySelectorAll('tr')).length,
+      numLinks: countLinks(t),
+      numTabindex: countTabIndex(t),
+      numImages: countImages(t)
+    }
+  });
+  
+  console.table(tableData);
 
   console.log('\n-----\n')
 
   const lists = Array.from(document.body.querySelectorAll('ul,ol'));
-  lists.map((l, i) => {
-    console.log(`List ${i}`);
-    console.log(`    Depth in body: ${countAncestors(l)}`);
-    console.log(`    Num items: ${Array.from(l.querySelectorAll('li')).length}`)
-    console.log(`    Num links: ${countLinks(l)}`);
+  const listData = lists.map((l, i) => {
+    return {
+      index: i,
+      depthInBody: countAncestors(l),
+      numItems: Array.from(l.querySelectorAll('li')).length,
+      numLinks: countLinks(l),
+      numTabindex: countTabIndex(l),
+      numImages: countImages(l)
+    }
   })
+  console.table(listData);
 }
 
 function countLinks(element) {
@@ -28,9 +48,20 @@ function countLinks(element) {
   });
   const uniqueLinks = [...new Set(trueLinks.map(a => a.href))];
   // uniqueLinks.map(a => console.log(a));
-  console.log(uniqueLinks[0])
+  // console.log(uniqueLinks[0])
   return uniqueLinks.length;
 }
+
+function countTabIndex(element){
+  const els = Array.from(element.querySelectorAll('[tabindex]'));
+  return els.length;
+}
+
+function countImages(element){
+  const els = Array.from(element.querySelectorAll('img'));
+  return els.length;
+}
+
 
 function countAncestors(element) {
   let count = 0;
