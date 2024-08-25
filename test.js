@@ -15,9 +15,10 @@ fs.readdirSync(testDir).forEach(file => {
         
         global.window = dom.window;
         global.document = dom.window.document;
-
+        console.log('--------------------------------------');
         console.log(`Testing ${file}:`);
+        console.log('--------------------------------------');
         extractElements();
-        console.log('-------------------');
+        console.log('--------------------------------------\n\n\n');
     }
 });
